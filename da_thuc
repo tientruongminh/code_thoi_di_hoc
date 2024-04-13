@@ -1,0 +1,240 @@
+#include <stdio.h>
+#include <math.h>
+typedef struct
+{
+    double he_so;
+    int mu;
+}don_thuc;
+typedef struct
+{
+    int so_ptu;
+    don_thuc dt[100];
+}da_thuc;
+typedef struct
+{
+    int so_da_thuc;
+    da_thuc dat[100];
+}mang_da_thuc;
+// định nghĩa đơn thúc 0 và -1
+don_thuc dt0,dt1;
+dt0.he_so = 0;
+dt0.mu = 1;
+dt1.he_so = -1;
+dt1.he_so = 1;
+// định nghĩa đa thức 0 và -1
+da_thuc da_thuc0, da_thuc_1;
+da_thuc0.so_ptu = 1;
+da_thuc0.dt[0]=dt0;
+da_thuc_1.so_ptu = 1;
+da_thuc_1.dt[0] = dt1;
+// hàm nhập đa thức
+void nhap_da_thuc(da_thuc &da_thuc);
+//hàm xuất đa thức
+void xuat_da_thuc(da_thuc da_thuc);
+// hamt tính tổng đa thức
+da_thuc tong_da_thuc(da_thuc da_thuc1, da_thuc da_thuc2);
+//hàm sắp xếp đa thức theo thứ tự nếu có mũ giống nhau thì cộng lại luôn
+void sort_da_thuc(da_thuc &da_thuc1);
+//hàm xóa một đơn thức ra khỏi một đa thức
+void xoa_don_thuc(da_thuc &da_thuc, int &vitri);
+// hàm nhân 2 đơn thức
+don_thuc nhan_don_thuc(don_thuc don_thuc1, don_thuc don_thuc2);
+// hàm chia đơn thức
+don_thuc chia_don_thuc(don_thuc don_thuc1, don_thuc don_thuc2);
+//hàm ghép hai đa thức thành một đa thức mới
+da_thuc ghep_da_thuc( da_thuc da_thuc1, da_thuc da_thuc2);
+// hàm nhân hai đa thức
+da_thuc nhan_da_thuc (da_thuc da_thuc1, da_thuc da_thuc2);
+// ham tính hiệu hai đa thức
+da_thuc hieu_da_thuc (da_thuc da_thuc1, da_thuc da_thuc2);
+//hàm tính thương hai đa thức
+mang_da_thuc chia_da_thuc(da_thuc da_thuc1, da_thuc da_thuc2);
+int main()
+{
+    da_thuc da_thuc1, da_thuc2,da_thuc_tong,da_thuc_nhan,da_thuc_hieu, thuong_da_thuc, du_da_thuc;
+    nhap_da_thuc(da_thuc1);
+    nhap_da_thuc(da_thuc2);
+    printf("đa thức thứ nhất là");
+    xuat_da_thuc (da_thuc1);
+    printf("\nđa thức thứ 2 là");
+    xuat_da_thuc(da_thuc2);
+    da_thuc_tong = tong_da_thuc( da_thuc1, da_thuc2);
+    printf("\ntổng hai đa thức là");
+    xuat_da_thuc(da_thuc_tong);
+    da_thuc_nhan = nhan_da_thuc(da_thuc1,da_thuc2);
+    printf("\n Tích hai đa thức là:");
+    xuat_da_thuc(da_thuc_nhan);
+    da_thuc_hieu = hieu_da_thuc(da_thuc1, da_thuc2);
+    da_thuc_thuong = thuong_da_thuc(da_thuc1,da_thuc2).thuong;
+    da_thuc_du = thuong_da_thuc(da_thuc1, da_thuc2).du;
+    printf("\nthuong hai đa thức là");
+    xuat_da_thuc(da_thuc_thuong);
+    xuat_da_thuc(da_thuc_du);
+    return 0;
+}
+void nhap_da_thuc(da_thuc &da_thuc)
+{
+    printf("nhap so phan tu cua da thuc");
+    scanf("%d",&da_thuc.so_ptu);
+    for(int i=0;i<da_thuc.so_ptu;i++)
+    {
+        printf("nhap he so don thuc thu %d",i+1);
+        scanf("%lf",&da_thuc.dt[i].he_so);
+        printf("nhap mu don thuc thu %d",i+1);
+        scanf("%d",&da_thuc.dt[i].mu);
+    }
+}
+void xuat_da_thuc(da_thuc da_thuc)
+{
+   
+  for(int i=0;i<da_thuc.so_ptu;i++)
+  {
+      if(da_thuc.dt[i].mu == 0)
+      {
+      if(da_thuc.dt[i].he_so==0) continue;
+      if(i==0)
+      printf("%0.2lf",(da_thuc.dt[i].he_so));
+      else if( da_thuc.dt[i].he_so <0)
+      printf(" - %0.2lf",abs(da_thuc.dt[i].he_so));
+      else printf(" + %0.2lf",(da_thuc.dt[i].he_so));
+     }
+     else if (da_thuc.dt[i].mu == 1)
+     {
+        if(da_thuc.dt[i].he_so==0) continue;
+         if(i==0)
+      printf("%0.2lfx ",(da_thuc.dt[i].he_so));
+      else if( da_thuc.dt[i].he_so <0)
+      printf(" - %0.2lfx ",abs(da_thuc.dt[i].he_so));
+      else printf(" + %0.2lfx",(da_thuc.dt[i].he_so));
+     }
+     else 
+     {
+        if(da_thuc.dt[i].he_so==0) continue;
+      if(i==0)
+      printf("%0.2lfx^%d ",(da_thuc.dt[i].he_so),da_thuc.dt[i].mu);
+      else if( da_thuc.dt[i].he_so <0)
+      printf(" - %0.2lfx^%d ",abs(da_thuc.dt[i].he_so),da_thuc.dt[i].mu);
+      else printf(" + %0.2lfx^%d ",(da_thuc.dt[i].he_so),da_thuc.dt[i].mu);
+     }
+  }
+}
+
+void xoa_don_thuc(da_thuc &da_thuc, int &vitri)
+{
+    for(int i = vitri;i< da_thuc.so_ptu;i++)
+    {
+        da_thuc.dt[i] = da_thuc.dt[i+1];
+    }
+    da_thuc.so_ptu--;
+    vitri--;
+    
+}
+
+void sort_da_thuc(da_thuc &da_thuc1)
+{
+    for(int i=0;i< da_thuc1.so_ptu;i++)
+    {
+        for(int j = i+1;j< da_thuc1.so_ptu ; j++)
+        {
+            if(da_thuc1.dt[i].mu<da_thuc1.dt[j].mu)
+            {
+                don_thuc temp;
+                temp = da_thuc1.dt[i];
+                da_thuc1.dt[i] = da_thuc1.dt[j];
+                da_thuc1.dt[j] = temp;
+            }
+            else if(da_thuc1.dt[i].mu == da_thuc1.dt[j].mu)
+            {
+                da_thuc1.dt[i].he_so += da_thuc1.dt[j].he_so;
+                xoa_don_thuc(da_thuc1, j);
+                
+            }
+        }
+    }
+}
+da_thuc ghep_da_thuc( da_thuc da_thuc1, da_thuc da_thuc2)
+{
+    int i,j;
+    da_thuc da_thuc3;
+    for(i=0;i<da_thuc1.so_ptu;i++)
+    {
+        da_thuc3.dt[i]=da_thuc1.dt[i];
+        
+    }
+    for(j=0;j <da_thuc2.so_ptu;i++)
+    {
+        da_thuc3.dt[i+j]=da_thuc1.dt[j];
+        
+    }
+    da_thuc3.so_ptu = i+j+2;
+    return da_thuc3;
+}
+da_thuc tong_da_thuc(da_thuc da_thuc1, da_thuc da_thuc2)
+{
+    da_thuc da_thuc3;
+    da_thuc3 = ghep_da_thuc(da_thuc1,da_thuc2);
+    sort_da_thuc(da_thuc3);
+    for(int i=0 ; i< da_thuc3.so_ptu;i++)
+    {
+        if(da_thuc3.dt[i].he_so == 0)
+        {
+            xoa_don_thuc(da_thuc3,i);
+        }
+    }
+}
+don_thuc nhan_don_thuc(don_thuc don_thuc1, don_thuc don_thuc2)
+{
+    don_thuc don_thuc3;
+    don_thuc3.he_so = don_thuc1.he_so * don_thuc2.he_so;
+    don_thuc3.mu = don_thuc1.mu + don_thuc2.mu;
+    return don_thuc3;
+}
+don_thuc chia_don_thuc(don_thuc don_thuc1, don_thuc don_thuc2)
+{
+   don_thuc don_thuc3;
+    don_thuc3.he_so = don_thuc1.he_so / don_thuc2.he_so;
+    don_thuc3.mu = don_thuc1.mu - don_thuc2.mu;
+    return don_thuc3; 
+}
+
+da_thuc nhan_da_thuc (da_thuc da_thuc1, da_thuc da_thuc2)
+{
+    mang_da_thuc mang_da_thuc1;
+    for(int i=0; i< da_thuc1.so_ptu;i++)
+    {
+        for(int j=0;j< da_thuc2.so_ptu;j++)
+        {
+            mang_da_thuc1.dat[i].dt[j] = nhan_don_thuc(da_thuc1.dt[i],da_thuc2.dt[j]);
+        }
+    }
+    da_thuc da_thuc_lon;
+    da_thuc_lon= ghep_da_thuc(mang_da_thuc1.dat[0],da_thuc0);
+    for(int i=1;i<da_thuc1.so_ptu;i++)
+    {
+        da_thuc_lon = ghep_da_thuc(da_thuc_lon,mang_da_thuc1[i]);
+    }
+    sort_da_thuc(da_thuc_lon);
+    return da_thuc_lon;
+}
+da_thuc hieu_da_thuc (da_thuc da_thuc1, da_thuc da_thuc2)
+{
+    return tong_da_thuc(da_thuc1, nhan_da_thuc(da_thuc2, da_thuc_1));
+}
+mang_da_thuc chia_da_thuc(da_thuc da_thuc1, da_thuc da_thuc2)
+{
+    sort_da_thuc(da_thuc1);
+    sort_da_thuc(da_thuc2);
+    da_thuc thuong,du;
+    mang_da_thuc phep_chia;
+    thuong = phep_chia.dat[0] ;
+    du = phep_chia.dat[1];
+    thuong = chia_don_thuc(da_thuc1.dt[0],da_thuc2.dt[0]);
+    du = hieu_da_thuc(da_thuc1, nhan_da_thuc(thuong, da_thuc2);
+    while(du.dt[0].mu < da_thuc2.dt[0].mu)
+    {
+        thuong = tong_da_thuc(thuong, chia_don_thuc(du.dt[0],da_thuc2.dt[0]));
+        du     = hieu_da_thuc(du,nhan_da_thuc(thuong,da_thuc2));
+    }
+    return phep_chia;
+}
+
